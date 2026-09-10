@@ -3,6 +3,9 @@ import { ContributionGraph } from "@/components/ContributionGraph";
 import { ProjectList } from "@/components/ProjectList";
 import { GITHUB_USERNAME } from "@/lib/github";
 
+// TODO: reemplaza con tu email real
+const CONTACT_EMAIL = "tu-email@ejemplo.com";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
