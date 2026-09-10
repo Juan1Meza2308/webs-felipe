@@ -1,5 +1,22 @@
 export const GITHUB_USERNAME = "Juan1Meza2308";
 
+const HIDDEN_REPO_NAMES = [
+  "juan1meza2308",
+  "copilot-mine",
+  "tokenguard",
+  "portfolio",
+  "para-luisa",
+];
+
+const HIDDEN_REPO_KEYS = new Set(
+  HIDDEN_REPO_NAMES.map((name) => name.toLowerCase().replace(/[\s_-]/g, "")),
+);
+
+function isHiddenRepo(name: string): boolean {
+  const key = name.toLowerCase().replace(/[\s_-]/g, "");
+  return HIDDEN_REPO_KEYS.has(key);
+}
+
 export type Repo = {
   id: number;
   name: string;
@@ -31,7 +48,9 @@ export async function fetchRepos(user = GITHUB_USERNAME): Promise<Repo[]> {
   });
   if (!res.ok) throw new Error(`GitHub repos request failed (${res.status})`);
   const data: Repo[] = await res.json();
-  return data.filter((r) => !r.fork).sort((a, b) => b.stargazers_count - a.stargazers_count);
+  return data
+    .filter((r) => !r.fork && !isHiddenRepo(r.name))
+    .sort((a, b) => b.stargazers_count - a.stargazers_count);
 }
 
 export async function fetchContributions(user = GITHUB_USERNAME): Promise<Contributions> {
