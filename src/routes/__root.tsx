@@ -97,6 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Felipe" },
       { name: "application-name", content: "webs.felipe" },
       { name: "robots", content: "index, follow" },
+      { name: "google-site-verification", content: "lzJx4mVaWqUXk5Znw-5afgsZRKtXCMJASo1Lms9XWB4" },
       { property: "og:site_name", content: "webs.felipe" },
       { property: "og:title", content: SITE_TITLE },
       { property: "og:description", content: SITE_DESCRIPTION },
