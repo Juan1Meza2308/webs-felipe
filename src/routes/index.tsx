@@ -3,6 +3,9 @@ import { ContributionGraph } from "@/components/ContributionGraph";
 import { ProjectList } from "@/components/ProjectList";
 import { GITHUB_USERNAME } from "@/lib/github";
 
+// TODO: reemplaza con tu email real
+const CONTACT_EMAIL = "tu-email@ejemplo.com";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -83,12 +86,10 @@ function Index() {
                 resolver problemas.
               </p>
               <a
-                href={`https://github.com/${GITHUB_USERNAME}`}
-                target="_blank"
-                rel="noreferrer"
+                href="#contacto"
                 className="mt-8 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
               >
-                Ver mi GitHub
+                Contáctame
               </a>
             </div>
             <ContributionGraph />
@@ -131,18 +132,60 @@ function Index() {
         id="contacto"
         className="dark bg-background px-6 py-20 text-foreground md:px-12"
       >
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <h2 className="font-display text-4xl md:text-6xl">
-            Trabajemos juntos
-          </h2>
-          <a
-            href={`https://github.com/${GITHUB_USERNAME}`}
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm text-muted-foreground hover:text-accent"
-          >
-            github.com/{GITHUB_USERNAME}
-          </a>
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <h2 className="font-display text-4xl md:text-6xl">
+              Trabajemos juntos
+            </h2>
+            <a
+              href={`https://github.com/${GITHUB_USERNAME}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm text-muted-foreground hover:text-accent"
+            >
+              github.com/{GITHUB_USERNAME}
+            </a>
+          </div>
+
+          <div className="mt-12 grid gap-8 rounded-3xl border border-border/60 bg-secondary/40 p-8 md:grid-cols-2 md:p-12">
+            <div>
+              <h3 className="text-2xl font-semibold">¿Tienes un proyecto?</h3>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                Cuéntame qué necesitas y te respondo lo antes posible.
+              </p>
+            </div>
+            <form
+              action={`mailto:${CONTACT_EMAIL}`}
+              method="post"
+              encType="text/plain"
+              className="flex flex-col gap-4"
+            >
+              <input
+                type="text"
+                name="name"
+                placeholder="Tu nombre"
+                className="rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Tu email"
+                className="rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent"
+              />
+              <textarea
+                name="message"
+                rows={4}
+                placeholder="Cuéntame sobre tu proyecto..."
+                className="rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent"
+              />
+              <button
+                type="submit"
+                className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+              >
+                Enviar mensaje
+              </button>
+            </form>
+          </div>
         </div>
       </footer>
     </main>
