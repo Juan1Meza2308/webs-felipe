@@ -86,12 +86,10 @@ function Index() {
                 resolver problemas.
               </p>
               <a
-                href={`https://github.com/${GITHUB_USERNAME}`}
-                target="_blank"
-                rel="noreferrer"
+                href="#contacto"
                 className="mt-8 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
               >
-                Ver mi GitHub
+                Contáctame
               </a>
             </div>
             <ContributionGraph />
