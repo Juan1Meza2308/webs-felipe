@@ -15,14 +15,17 @@ function chunkWeeks(days: ContributionDay[]) {
   return weeks;
 }
 
+const MAX_WEEKS = 26;
+
 export function ContributionGraph({ username }: { username?: string }) {
   const { data, isLoading, isError } = useQuery(contributionsQuery(username));
 
   const days = data?.contributions ?? [];
-  const weeks = chunkWeeks(days);
-  const first = days[0]?.date;
-  const last = days[days.length - 1]?.date;
-  const total = days.reduce((s, d) => s + d.count, 0);
+  const weeks = chunkWeeks(days).slice(-MAX_WEEKS);
+  const shownDays = weeks.flat();
+  const first = shownDays[0]?.date;
+  const last = shownDays[shownDays.length - 1]?.date;
+  const total = shownDays.reduce((s, d) => s + d.count, 0);
 
   const fmt = (d?: string) =>
     d ? new Date(d).toLocaleDateString("es", { month: "short", year: "2-digit" }) : "";
@@ -47,17 +50,17 @@ export function ContributionGraph({ username }: { username?: string }) {
 
       {!isLoading && !isError && (
         <>
-          <div className="mt-5 overflow-x-auto">
-            <div className="flex gap-[3px]">
+          <div className="mt-5">
+            <div className="flex gap-[2px] md:gap-[3px]">
               {weeks.map((week, i) => (
-                <div key={i} className="flex flex-col gap-[3px]">
+                <div key={i} className="flex flex-col gap-[2px] md:gap-[3px]">
                   {week.map((day) => (
                     <span
                       key={day.date}
                       role="img"
                       aria-label={`${day.count} contribuciones el ${day.date}`}
                       title={`${day.count} contribuciones · ${day.date}`}
-                      className={`size-[9px] rounded-[2px] ${levelClass[day.level]}`}
+                      className={`size-[8px] rounded-[2px] md:size-[9px] ${levelClass[day.level]}`}
                     />
                   ))}
                 </div>
@@ -66,7 +69,7 @@ export function ContributionGraph({ username }: { username?: string }) {
           </div>
           <div className="mt-4 flex items-center justify-between text-[11px] text-muted-foreground">
             <span>{fmt(first)}</span>
-            <span className="font-medium text-foreground">{total} contribuciones</span>
+            <span className="font-medium text-foreground">{total} en 6 meses</span>
             <span>{fmt(last)}</span>
           </div>
           <div className="mt-3 flex items-center justify-end gap-1.5 text-[10px] text-muted-foreground">
@@ -74,7 +77,7 @@ export function ContributionGraph({ username }: { username?: string }) {
             {[0, 1, 2, 3, 4].map((level) => (
               <span
                 key={level}
-                className={`size-[9px] rounded-[2px] ${levelClass[level]}`}
+                className={`size-[8px] rounded-[2px] md:size-[9px] ${levelClass[level]}`}
                 aria-hidden="true"
               />
             ))}
