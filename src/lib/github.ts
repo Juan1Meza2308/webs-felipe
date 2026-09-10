@@ -1,4 +1,4 @@
-export const GITHUB_USERNAME = "webs-felipe";
+export const GITHUB_USERNAME = "Juan1Meza2308";
 
 export type Repo = {
   id: number;
