@@ -7,10 +7,28 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+
+const SITE_URL = "https://webs-felipe.vercel.app";
+const SITE_TITLE = "Felipe | Desarrollador Web Full Stack";
+const SITE_DESCRIPTION =
+  "Portfolio de Felipe, desarrollador web full stack. Proyectos, contribuciones de GitHub y servicios de desarrollo web en React, Node.js y TypeScript.";
+
+const THEME_INIT_SCRIPT = `
+(function () {
+  try {
+    var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = stored || (prefersDark ? 'dark' : 'light');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    document.documentElement.style.colorScheme = theme;
+  } catch (e) {}
+})();
+`;
 
 function NotFoundComponent() {
   return (
@@ -37,9 +55,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -77,14 +92,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: SITE_TITLE },
+      { name: "description", content: SITE_DESCRIPTION },
+      { name: "author", content: "Felipe" },
+      { name: "application-name", content: "webs.felipe" },
+      { name: "robots", content: "index, follow" },
+      { property: "og:site_name", content: "webs.felipe" },
+      { property: "og:title", content: SITE_TITLE },
+      { property: "og:description", content: SITE_DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:locale", content: "es_ES" },
+      { property: "og:image", content: `${SITE_URL}/og-image.png` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: SITE_TITLE },
+      { name: "twitter:description", content: SITE_DESCRIPTION },
+      { name: "twitter:image", content: `${SITE_URL}/og-image.png` },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -98,7 +121,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "canonical", href: SITE_URL },
     ],
+    scripts: [{ children: THEME_INIT_SCRIPT }],
   }),
 
   shellComponent: RootShell,
@@ -109,9 +134,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Felipe",
+              alternateName: "webs.felipe",
+              jobTitle: "Desarrollador Web Full Stack",
+              description: SITE_DESCRIPTION,
+              url: SITE_URL,
+              sameAs: [
+                `https://github.com/Juan1Meza2308`,
+                "https://www.tiktok.com/@webs.felipe",
+                "https://www.instagram.com/webs.felipe",
+              ],
+              knowsAbout: [
+                "React",
+                "Node.js",
+                "TypeScript",
+                "Next.js",
+                "Tailwind CSS",
+                "PostgreSQL",
+              ],
+            }),
+          }}
+        />
       </head>
       <body>
         {children}
@@ -126,7 +178,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );

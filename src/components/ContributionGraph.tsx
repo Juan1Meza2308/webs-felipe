@@ -25,9 +25,7 @@ export function ContributionGraph({ username }: { username?: string }) {
   const total = days.reduce((s, d) => s + d.count, 0);
 
   const fmt = (d?: string) =>
-    d
-      ? new Date(d).toLocaleDateString("es", { month: "short", year: "2-digit" })
-      : "";
+    d ? new Date(d).toLocaleDateString("es", { month: "short", year: "2-digit" }) : "";
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5">
@@ -40,9 +38,7 @@ export function ContributionGraph({ username }: { username?: string }) {
         </svg>
       </div>
 
-      {isLoading && (
-        <div className="mt-6 h-24 animate-pulse rounded-md bg-muted" />
-      )}
+      {isLoading && <div className="mt-6 h-24 animate-pulse rounded-md bg-muted" />}
       {isError && (
         <p className="mt-6 text-sm text-muted-foreground">
           No se pudieron cargar las contribuciones ahora mismo.
@@ -58,6 +54,8 @@ export function ContributionGraph({ username }: { username?: string }) {
                   {week.map((day) => (
                     <span
                       key={day.date}
+                      role="img"
+                      aria-label={`${day.count} contribuciones el ${day.date}`}
                       title={`${day.count} contribuciones · ${day.date}`}
                       className={`size-[9px] rounded-[2px] ${levelClass[day.level]}`}
                     />
@@ -68,8 +66,19 @@ export function ContributionGraph({ username }: { username?: string }) {
           </div>
           <div className="mt-4 flex items-center justify-between text-[11px] text-muted-foreground">
             <span>{fmt(first)}</span>
-            <span>{total} contribuciones</span>
+            <span className="font-medium text-foreground">{total} contribuciones</span>
             <span>{fmt(last)}</span>
+          </div>
+          <div className="mt-3 flex items-center justify-end gap-1.5 text-[10px] text-muted-foreground">
+            <span>Menos</span>
+            {[0, 1, 2, 3, 4].map((level) => (
+              <span
+                key={level}
+                className={`size-[9px] rounded-[2px] ${levelClass[level]}`}
+                aria-hidden="true"
+              />
+            ))}
+            <span>Más</span>
           </div>
         </>
       )}
