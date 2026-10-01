@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, type Translations } from "@/lib/i18n";
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, type Translations, translations } from "@/lib/i18n";
 
 interface LanguageContextValue {
   locale: Locale;
@@ -29,10 +29,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("locale", newLocale);
   };
 
-  if (!mounted) {
-    return <>{children}</>;
-  }
-
+  // During SSR (mounted=false), provide default locale context so useLanguage works.
+  // After hydration (mounted=true), the provider value updates with the stored locale.
   return (
     <LanguageContext.Provider
       value={{
