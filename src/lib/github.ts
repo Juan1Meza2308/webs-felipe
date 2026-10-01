@@ -1,6 +1,11 @@
 export const GITHUB_USERNAME = "Juan1Meza2308";
 
-const SHOW_REPO_NAMES = ["vitrina", "triple-a-del-norte", "kairos-surf-experience"];
+const SHOW_REPO_NAMES = [
+  "vitrina",
+  "triple-a-del-norte",
+  "kairos-surf-experience",
+  "og-card-studio",
+];
 
 const SHOW_REPO_KEYS = new Set(
   SHOW_REPO_NAMES.map((name) => name.toLowerCase().replace(/[\s_-]/g, "")),

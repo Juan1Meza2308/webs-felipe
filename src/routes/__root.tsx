@@ -35,16 +35,16 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Página no encontrada</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          La página que buscas no existe o se ha movido.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            Volver al inicio
           </Link>
         </div>
       </div>
@@ -59,11 +59,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">La página no cargó</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          Algo salió mal. Puedes intentar recargarla o volver al inicio.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -73,13 +71,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            Reintentar
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            Volver al inicio
           </a>
         </div>
       </div>
@@ -98,6 +96,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "application-name", content: "webs.felipe" },
       { name: "robots", content: "index, follow" },
       { name: "google-site-verification", content: "lzJx4mVaWqUXk5Znw-5afgsZRKtXCMJASo1Lms9XWB4" },
+      { name: "theme-color", content: "#fdfdfc", media: "(prefers-color-scheme: light)" },
+      { name: "theme-color", content: "#08090b", media: "(prefers-color-scheme: dark)" },
       { property: "og:site_name", content: "webs.felipe" },
       { property: "og:title", content: SITE_TITLE },
       { property: "og:description", content: SITE_DESCRIPTION },
@@ -105,10 +105,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:url", content: SITE_URL },
       { property: "og:locale", content: "es_ES" },
       { property: "og:image", content: `${SITE_URL}/og-image.png` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        property: "og:image:alt",
+        content: "webs.felipe — portfolio de Felipe, desarrollador web full stack",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: SITE_TITLE },
       { name: "twitter:description", content: SITE_DESCRIPTION },
       { name: "twitter:image", content: `${SITE_URL}/og-image.png` },
+      {
+        name: "twitter:image:alt",
+        content: "webs.felipe — portfolio de Felipe, desarrollador web full stack",
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -134,6 +144,49 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+const STACK_LD = [
+  "React",
+  "Next.js",
+  "Node.js",
+  "TypeScript",
+  "Tailwind CSS",
+  "PostgreSQL",
+  "Vite",
+  "Git",
+];
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "webs.felipe",
+      description: SITE_DESCRIPTION,
+      inLanguage: "es",
+      publisher: { "@id": `${SITE_URL}/#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: "Felipe",
+      alternateName: "webs.felipe",
+      image: `${SITE_URL}/og-image.png`,
+      email: "mailto:juan1meza2308@gmail.com",
+      jobTitle: "Desarrollador Web Full Stack",
+      description: SITE_DESCRIPTION,
+      url: SITE_URL,
+      sameAs: [
+        `https://github.com/Juan1Meza2308`,
+        "https://www.tiktok.com/@webs.felipe",
+        "https://www.instagram.com/webs.felipe",
+      ],
+      knowsAbout: STACK_LD,
+    },
+  ],
+};
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
@@ -142,28 +195,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Felipe",
-              alternateName: "webs.felipe",
-              jobTitle: "Desarrollador Web Full Stack",
-              description: SITE_DESCRIPTION,
-              url: SITE_URL,
-              sameAs: [
-                `https://github.com/Juan1Meza2308`,
-                "https://www.tiktok.com/@webs.felipe",
-                "https://www.instagram.com/webs.felipe",
-              ],
-              knowsAbout: [
-                "React",
-                "Node.js",
-                "TypeScript",
-                "Next.js",
-                "Tailwind CSS",
-                "PostgreSQL",
-              ],
-            }),
+            __html: JSON.stringify(JSON_LD),
           }}
         />
       </head>
